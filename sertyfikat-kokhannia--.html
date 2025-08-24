@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="uk">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>Запрошення в майбутнє — від Олександра</title>
+		<meta
+			name="description"
+			content="Маленький романтичний сайт‑запрошення: конверт, форма та сертифікат кохання із сюрпризом." />
+		<style>
+			:root {
+				--bg: #0e0f1a; /* фон */
+				--fg: #e8ecf8; /* текст */
+				--muted: #a9b0c7; /* вторичний текст */
+				--card: #14172a; /* карточки */
+				--accent: #8b5cf6; /* фіолетовий */
+				--accent2: #22d3ee; /* бірюзовий */
+				--ok: #10b981; /* підтвердження */
+				--danger: #ef4444;
+				--shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+				--radius: 18px;
+			}
+			* {
+				box-sizing: border-box;
+			}
+			html,
+			body {
+				margin: 0;
+				padding: 0;
+				font: 16px/1.6 system-ui, -apple-system, Segoe UI, Roboto, Ubuntu,
+					Cantarell, Noto Sans, sans-serif;
+				color: var(--fg);
+				background: radial-gradient(
+						1000px 700px at 80% -10%,
+						rgba(34, 211, 238, 0.12),
+						transparent 60%
+					),
+					radial-gradient(
+						900px 900px at -10% 30%,
+						rgba(139, 92, 246, 0.12),
+						transparent 60%
+					),
+					var(--bg);
+			}
+			a {
+				color: inherit;
+				text-decoration: none;
+			}
+			.container {
+				max-width: 980px;
+				margin: 0 auto;
+				padding: 24px;
+			}
+			.center {
+				display: grid;
+				place-items: center;
+				min-height: 100dvh;
+			}
+			.hidden {
+				display: none;
+			}
+
+			/* Карточки */
+			.card {
+				background: linear-gradient(
+					180deg,
+					rgba(255, 255, 255, 0.04),
+					rgba(255, 255, 255, 0.02)
+				);
+				border: 1px solid rgba(255, 255, 255, 0.08);
+				backdrop-filter: blur(6px);
+				border-radius: var(--radius);
+				box-shadow: var(--shadow);
+			}
+
+			/* ====== Шаг 1: Конверт ====== */
+			.stage {
+				position: relative;
+			}
+			.cta {
+				position: absolute;
+				inset: auto 0 -96px 0;
+				margin: auto;
+				text-align: center;
+				color: var(--muted);
+				opacity: 0.9;
+			}
+			.title {
+				font-size: clamp(22px, 4vw, 34px);
+				font-weight: 700;
+				letter-spacing: 0.2px;
+				margin-bottom: 8px;
+			}
+
+			.envelope-wrap {
+				width: min(380px, 90vw);
+				height: 260px;
+				position: relative;
+				animation: floatIn 0.9s cubic-bezier(0.2, 0.9, 0.2, 1) both;
+				cursor: pointer;
+			}
+			.envelope {
+				position: absolute;
+				inset: 0;
+				border-radius: 20px;
+				background: linear-gradient(180deg, #1a1f3a, #11152a);
+				box-shadow: var(--shadow);
+				overflow: hidden;
+			}
+			.envelope .back {
+				position: absolute;
+				inset: 0;
+				background: linear-gradient(180deg, #182044, #0d1228);
+			}
+			.envelope .flap {
+				position: absolute;
+				left: 0;
+				right: 0;
+				top: 0;
+				height: 60%;
+				background: linear-gradient(180deg, #212a58, #151a37);
+				clip-path: polygon(0 0, 100% 0, 50% 100%);
+				transform-origin: 50% 0;
+				transition: transform 0.8s cubic-bezier(0.2, 0.9, 0.2, 1);
+			}
+			.envelope .letter {
+				position: absolute;
+				left: 6%;
+				right: 6%;
+				top: 20%;
+				height: 68%;
+				background: #fff;
+				border-radius: 12px;
+				box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+				display: grid;
+				place-items: center;
+				padding: 18px;
+				color: #14172a;
+				transform: translateY(6%);
+				transition: transform 0.8s 0.15s cubic-bezier(0.2, 0.9, 0.2, 1);
+			}
+
+			.envelope-wrap:hover .envelope .letter {
+				transform: translateY(0);
+			}
+			.envelope-wrap.opened .flap {
+				transform: rotateX(170deg);
+			}
+			.envelope-wrap.opened .letter {
+				transform: translateY(-70%);
+			}
+
+			.note {
+				font-size: clamp(14px, 2.5vw, 16px);
+				text-align: center;
+				color: var(--muted);
+			}
+			@keyframes floatIn {
+				0% {
+					transform: translateY(-80vh) scale(0.8);
+					opacity: 0;
+				}
+				100% {
+					transform: none;
+					opacity: 1;
+				}
+			}
+
+			/* ====== Шаг 2: Форма ====== */
+			form {
+				display: grid;
+				gap: 14px;
+				padding: 22px;
+			}
+			.form-card {
+				width: min(680px, 95vw);
+			}
+			label {
+				font-weight: 600;
+			}
+			input[type="text"],
+			input[type="date"] {
+				width: 100%;
+				padding: 12px 14px;
+				border-radius: 12px;
+				border: 1px solid rgba(255, 255, 255, 0.12);
+				background: #0f1327;
+				color: var(--fg);
+				outline: none;
+			}
+			.agree {
+				display: flex;
+				gap: 10px;
+				align-items: flex-start;
+			}
+			.agree input {
+				margin-top: 3px;
+			}
+			.btn {
+				display: inline-flex;
+				align-items: center;
+				justify-content: center;
+				gap: 10px;
+				border: 0;
+				border-radius: 14px;
+				padding: 12px 16px;
+				font-weight: 700;
+				cursor: pointer;
+			}
+			.btn.primary {
+				background: linear-gradient(90deg, var(--accent), var(--accent2));
+				color: #0b0d18;
+			}
+			.btn.ghost {
+				background: transparent;
+				border: 1px solid rgba(255, 255, 255, 0.15);
+				color: var(--fg);
+			}
+			.btn:disabled {
+				opacity: 0.6;
+				cursor: not-allowed;
+			}
+			.help {
+				color: #fca5a5;
+				font-size: 14px;
+			}
+
+			/* ====== Шаг 3: Сертифікат ====== */
+			.cert {
+				width: min(760px, 96vw);
+				margin: auto;
+				padding: 26px;
+			}
+			.paper {
+				background: #fff;
+				color: #0f1220;
+				border-radius: 18px;
+				box-shadow: var(--shadow);
+				padding: 34px 28px;
+				position: relative;
+			}
+			.paper:before {
+				content: "";
+				position: absolute;
+				inset: 0;
+				border: 2px dashed rgba(20, 23, 42, 0.12);
+				border-radius: 16px;
+				pointer-events: none;
+				margin: 10px;
+			}
+			.paper h2 {
+				margin: 0 0 6px 0;
+				font-size: 28px;
+			}
+			.paper h3 {
+				margin: 0 0 18px 0;
+				font-weight: 500;
+				color: #4b5563;
+			}
+			.paper p {
+				margin: 10px 0;
+			}
+			.sign {
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				margin-top: 22px;
+			}
+			.sign .line {
+				border-top: 1px solid #11182733;
+				flex: 1;
+				margin: 0 12px;
+			}
+			.cert-actions {
+				display: flex;
+				gap: 10px;
+				margin-top: 16px;
+				align-items: center;
+				justify-content: center;
+				flex-wrap: wrap;
+			}
+
+			/* Серця‑конфеті */
+			.hearts {
+				position: fixed;
+				inset: 0;
+				pointer-events: none;
+				overflow: hidden;
+			}
+			.heart {
+				position: absolute;
+				width: 18px;
+				height: 18px;
+				transform: translate(-50%, -50%);
+			}
+			.heart:before {
+				content: "❤";
+				font-size: 18px;
+			}
+			@keyframes burst {
+				0% {
+					transform: translate(-50%, -50%) scale(0.6);
+					opacity: 0;
+				}
+				10% {
+					opacity: 1;
+				}
+				100% {
+					transform: translate(var(--dx), var(--dy)) scale(0.6);
+					opacity: 0;
+				}
+			}
+
+			footer {
+				color: var(--muted);
+				font-size: 13px;
+				text-align: center;
+				margin: 36px 0 16px;
+			}
+
+			/* Мова — плаваючий перемикач праворуч зверху */
+			.lang {
+				position: fixed;
+				top: 14px;
+				right: 14px;
+				z-index: 60;
+			}
+			.lang button {
+				background: #0f1327;
+				border: 1px solid rgba(255, 255, 255, 0.15);
+				color: var(--fg);
+				border-radius: 999px;
+				padding: 8px 12px;
+				font-weight: 700;
+				cursor: pointer;
+				display: flex;
+				gap: 8px;
+				align-items: center;
+				box-shadow: var(--shadow);
+			}
+			.shake {
+				animation: shake 2.2s ease-in-out infinite;
+			}
+			@keyframes shake {
+				0%,
+				100% {
+					transform: rotate(0);
+				}
+				20% {
+					transform: rotate(2deg);
+				}
+				40% {
+					transform: rotate(-2deg);
+				}
+				60% {
+					transform: 1.6deg;
+				}
+				80% {
+					transform: -1.6deg;
+				}
+			}
+
+			/* QR блок */
+			#qrBox {
+				margin-top: 10px;
+				text-align: center;
+			}
+			#qrBox img {
+				width: 220px;
+				height: 220px;
+				image-rendering: pixelated;
+				border-radius: 12px;
+				box-shadow: var(--shadow);
+				background: #fff;
+			}
+		</style>
+	</head>
+	<body>
+		<!-- Перемикач мови -->
+		<div class="lang">
+			<button id="langBtn" class="shake" title="Змінити мову">
+				🌐 <span id="langLabel">UK</span>
+			</button>
+		</div>
+
+		<main class="container">
+			<!-- Шаг 1: Конверт -->
+			<section id="step1" class="center stage">
+				<div
+					id="envelopeWrap"
+					class="envelope-wrap"
+					title="Клікни, щоб відкрити">
+					<div class="envelope">
+						<div class="back"></div>
+						<div class="flap"></div>
+						<div class="letter">
+							<div style="text-align: center">
+								<div class="title" id="heroTitle">Спешл інвітейшн фор ю</div>
+								<div class="note" id="heroNote">Торкнись конверта ✉️</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="cta">
+					<div id="heroCta">Маленьке запрошення від Олександра</div>
+				</div>
+			</section>
+
+			<!-- Шаг 2: Форма -->
+			<section id="step2" class="center hidden">
+				<div class="form-card card" style="padding: 8px 8px 16px 8px">
+					<form id="inviteForm">
+						<h2 id="formTitle" style="margin: 6px 10px 4px 10px">
+							Кілька рядків для сертифіката
+						</h2>
+						<div>
+							<label for="last" id="lblLast">Прізвище</label>
+							<input
+								id="last"
+								type="text"
+								autocomplete="family-name"
+								required />
+						</div>
+						<div>
+							<label for="first" id="lblFirst">Ім'я</label>
+							<input
+								id="first"
+								type="text"
+								autocomplete="given-name"
+								required />
+						</div>
+						<div>
+							<label for="middle" id="lblMiddle">По батькові</label>
+							<input id="middle" type="text" required />
+						</div>
+						<div>
+							<label for="dob" id="lblDob">Дата народження</label>
+							<input id="dob" type="date" required />
+						</div>
+						<div>
+							<label for="pob" id="lblPob">Місце народження</label>
+							<input
+								id="pob"
+								type="text"
+								placeholder="Місто, країна"
+								required />
+						</div>
+						<div class="agree">
+							<input id="agree" type="checkbox" required />
+							<label for="agree" id="agreeText"
+								>Так, я погоджуюсь стати дівчиною <b>Олександра Сторожука</b> і
+								вирушити з ним у велике пригодницьке майбутнє.</label
+							>
+						</div>
+						<div id="help" class="help hidden">
+							Заповніть усі поля і позначте згоду.
+						</div>
+						<div
+							style="
+								display: flex;
+								gap: 10px;
+								flex-wrap: wrap;
+								margin-top: 6px;
+							">
+							<button class="btn ghost" type="button" id="backToLetter">
+								← До конверта
+							</button>
+							<button class="btn primary" type="submit" id="createBtn">
+								Створити сертифікат
+							</button>
+						</div>
+					</form>
+				</div>
+			</section>
+
+			<!-- Шаг 3: Сертифікат -->
+			<section id="step3" class="center hidden">
+				<div class="cert card">
+					<div class="paper" id="paper">
+						<h2 id="certTitle">Сертифікат кохання</h2>
+						<h3 id="certSubtitle">—</h3>
+						<p id="certBody"></p>
+						<p id="certRights"></p>
+						<div class="sign">
+							<span id="signLabel">Підпис:</span>
+							<span class="line"></span>
+							<span id="signName">—</span>
+						</div>
+					</div>
+					<div class="cert-actions">
+						<button id="confirmBtn" class="btn primary">Прийняти</button>
+						<a id="downloadBtn" class="btn ghost">Завантажити PDF</a>
+						<button id="playBtn" class="btn ghost hidden">
+							▶️ Увімкнути музику
+						</button>
+					</div>
+					<div id="qrBox" class="hidden">
+						<div id="qrCaption" style="color: var(--muted); margin: 6px 0 8px">
+							QR у радість
+						</div>
+						<img id="qrImage" src="qr-code.png" alt="Telegram QR" />
+					</div>
+				</div>
+			</section>
+
+			<div class="hearts" id="hearts"></div>
+
+			<footer id="footerNote">Від Отшельніка до Імператриці</footer>
+		</main>
+
+		<!-- YouTube API -->
+		<script>
+			// підключаємо Iframe API
+			(function () {
+				const tag = document.createElement("script");
+				tag.src = "https://www.youtube.com/iframe_api";
+				document.head.appendChild(tag);
+			})();
+		</script>
+		<!-- html2pdf для збереження PDF -->
+		<script>
+			(function () {
+				const s = document.createElement("script");
+				s.src =
+					"https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js";
+				document.head.appendChild(s);
+			})();
+		</script>
+
+		<div id="yt-holder" aria-hidden="true"></div>
+
+		<script>
+			// === Мова (UA / KZ) ===
+			const state = { lang: "uk", safeLast: "sertyfikat" };
+			const locales = { uk: "uk-UA", kk: "kk-KZ" };
+			const i18n = {
+				uk: {
+					heroNote: "Торкнись конверта ✉️",
+					heroCta: "Маленьке запрошення від Олександра",
+					formTitle: "Кілька рядків для сертифіката",
+					last: "Прізвище",
+					first: "Ім'я",
+					middle: "По батькові",
+					dob: "Дата народження",
+					pob: "Місце народження",
+					agree:
+						"Так, я погоджуюсь стати дівчиною <b>Олександра Сторожука</b> і вирушити з ним у велике пригодницьке майбутнє.",
+					help: "Заповніть усі поля і позначте згоду.",
+					back: "← До конверта",
+					create: "Створити сертифікат",
+					certTitle: "Сертифікат кохання",
+					sign: "Підпис:",
+					confirm: "Прийняти",
+					confirmed: "Прийнято ❤",
+					download: "Завантажити PDF",
+					qrCaption: "Скануй QR, щоб написати мені в Telegram",
+					play: "▶️ Увімкнути музику",
+				},
+				kk: {
+					heroNote: "Конвертке түртіңіз ✉️",
+					heroCta: "Александрдан шағын шақыру",
+					formTitle: "Сертификат үшін бірнеше жол",
+					last: "Тегі",
+					first: "Аты",
+					middle: "Әкесінің аты",
+					dob: "Туған күні",
+					pob: "Туған жері",
+					agree:
+						"Иә, мен Александр Сторожуктың қызы болуға және онымен бірге үлкен оқиғалы болашаққа аттануға келісемін.",
+					help: "Барлық өрістерді толтырып, келісімді белгілеңіз.",
+					back: "← Конвертке",
+					create: "Сертификат жасау",
+					certTitle: "Махаббат сертификаты",
+					sign: "Қолтаңба:",
+					confirm: "Қабылдаймын",
+					confirmed: "Қабылданды ❤",
+					download: "PDF жүктеу",
+					qrCaption: "Telegram-ға жазу үшін QR сканерлеңіз",
+					play: "▶️ Музыканы қосу",
+				},
+			};
+
+			function applyI18n() {
+				const t = i18n[state.lang];
+				document.getElementById("heroNote").textContent = t.heroNote;
+				document.getElementById("heroCta").textContent = t.heroCta;
+				document.getElementById("formTitle").textContent = t.formTitle;
+				document.getElementById("lblLast").textContent = t.last;
+				document.getElementById("lblFirst").textContent = t.first;
+				document.getElementById("lblMiddle").textContent = t.middle;
+				document.getElementById("lblDob").textContent = t.dob;
+				document.getElementById("lblPob").textContent = t.pob;
+				document.getElementById("agreeText").innerHTML = t.agree;
+				document.getElementById("help").textContent = t.help;
+				document.getElementById("backToLetter").textContent = t.back;
+				document.getElementById("createBtn").textContent = t.create;
+				document.getElementById("certTitle").textContent = t.certTitle;
+				document.getElementById("signLabel").textContent = t.sign;
+				document.getElementById("confirmBtn").textContent = t.confirm;
+				document.getElementById("downloadBtn").textContent = t.download;
+				document.getElementById("qrCaption").textContent = t.qrCaption;
+				document.getElementById("langLabel").textContent =
+					state.lang === "uk" ? "UK" : "KZ";
+				document.getElementById("playBtn").textContent = t.play;
+			}
+
+			const langBtn = document.getElementById("langBtn");
+			langBtn.addEventListener("click", () => {
+				state.lang = state.lang === "uk" ? "kk" : "uk";
+				applyI18n();
+			});
+
+			// === Навігація між кроками ===
+			const s1 = document.getElementById("step1");
+			const s2 = document.getElementById("step2");
+			const s3 = document.getElementById("step3");
+			const envelopeWrap = document.getElementById("envelopeWrap");
+			const backToLetter = document.getElementById("backToLetter");
+
+			const show = (el) => {
+				el.classList.remove("hidden");
+			};
+			const hide = (el) => {
+				el.classList.add("hidden");
+			};
+
+			envelopeWrap.addEventListener("click", () => {
+				envelopeWrap.classList.add("opened");
+				hide(s1);
+				show(s2);
+				setTimeout(() => window.scrollTo({ top: 0, behavior: "smooth" }), 50);
+			});
+			backToLetter.addEventListener("click", () => {
+				hide(s2);
+				show(s1);
+				envelopeWrap.classList.remove("opened");
+			});
+
+			// === Генерація сертифіката ===
+			const form = document.getElementById("inviteForm");
+			const help = document.getElementById("help");
+			const certSubtitle = document.getElementById("certSubtitle");
+			const certBody = document.getElementById("certBody");
+			const certRights = document.getElementById("certRights");
+			const signName = document.getElementById("signName");
+			const confirmBtn = document.getElementById("confirmBtn");
+			const downloadBtn = document.getElementById("downloadBtn");
+			const playBtn = document.getElementById("playBtn");
+
+			function fmtDateISOtoLocale(v) {
+				if (!v) return "";
+				try {
+					const d = new Date(v + "T00:00:00");
+					return d.toLocaleDateString(locales[state.lang], {
+						year: "numeric",
+						month: "long",
+						day: "numeric",
+					});
+				} catch (e) {
+					return v;
+				}
+			}
+
+			form.addEventListener("submit", (e) => {
+				e.preventDefault();
+				const last = document.getElementById("last").value.trim();
+				const first = document.getElementById("first").value.trim();
+				const middle = document.getElementById("middle").value.trim();
+				const dob = document.getElementById("dob").value;
+				const pob = document.getElementById("pob").value.trim();
+				const agree = document.getElementById("agree").checked;
+
+				if (!last || !first || !middle || !dob || !pob || !agree) {
+					help.classList.remove("hidden");
+					return;
+				}
+				help.classList.add("hidden");
+
+				const full = `${last} ${first} ${middle}`;
+				const dobLoc = fmtDateISOtoLocale(dob);
+
+				certSubtitle.textContent = `для ${full}`;
+				certBody.innerHTML = `Я, <b>${full}</b>, <i>${dobLoc}</i> року народження, місце народження — <i>${pob}</i>, урочисто підтверджую, що з цієї миті із радістю стаю дівчиною <b>Олександра Сторожука</b>. Обіцяю сміятися з ним, радіти, підтримувати і ділитися пригодами щодня.`;
+				certRights.textContent = "";
+				signName.textContent = full;
+
+				// для імені файлу PDF
+				state.safeLast =
+					last.toLowerCase().replace(/[^a-zа-яґєіїё-]+/gi, "-") || "sertyfikat";
+
+				hide(s2);
+				show(s3);
+				setTimeout(() => window.scrollTo({ top: 0, behavior: "smooth" }), 50);
+			});
+
+			// === Завантаження у PDF ===
+			downloadBtn.addEventListener("click", async (e) => {
+				e.preventDefault();
+				if (!window.html2pdf) {
+					alert("PDF модуль ще завантажується. Натисніть ще раз за секунду.");
+					return;
+				}
+				const opt = {
+					margin: 10,
+					filename: `sertyfikat-kohannia-${state.safeLast}.pdf`,
+					image: { type: "jpeg", quality: 0.98 },
+					html2canvas: { scale: 2, useCORS: true },
+					jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
+				};
+				window
+					.html2pdf()
+					.set(opt)
+					.from(document.getElementById("paper"))
+					.save();
+			});
+
+			// === Підтвердження + конфеті + музика + QR ===
+			confirmBtn.addEventListener("click", () => {
+				const t = i18n[state.lang];
+				confirmBtn.disabled = true;
+				confirmBtn.textContent = t.confirmed;
+				burstHearts();
+				// текст прав з моменту підтвердження
+				const now = new Date();
+				const when = now.toLocaleString(locales[state.lang], {
+					year: "numeric",
+					month: "long",
+					day: "numeric",
+					hour: "2-digit",
+					minute: "2-digit",
+				});
+				const textUK = `Цей сертифікат надає право на безмежні обійми, сміх, спільні подорожі, вечори, палкий секс та підтримку 24/7. Дійсний від ${when} до — ∞.`;
+				const textKZ = `Бұл сертификат шексіз құшақтау, күлкі, ортақ сапарлар, кештер, құмарлық секс және 24/7 қолдау құқығын береді. Жарамды: ${when} бастап — ∞ дейін.`;
+				certRights.textContent = state.lang === "uk" ? textUK : textKZ;
+				// Показати QR
+				document.getElementById("qrBox").classList.remove("hidden");
+				// Музика
+				playSong();
+			});
+
+			// === YouTube ===
+			let ytReady = false,
+				ytPlayer = null,
+				songStarted = false;
+			window.onYouTubeIframeAPIReady = function () {
+				ytReady = true;
+			};
+
+			function playSong() {
+				const holder = document.getElementById("yt-holder");
+				// якщо API готовий — використовуємо Player
+				if (ytReady) {
+					if (!document.getElementById("ytplayer")) {
+						const el = document.createElement("div");
+						el.id = "ytplayer";
+						el.style.position = "absolute";
+						el.style.left = "-9999px";
+						el.style.top = "-9999px";
+						holder.appendChild(el);
+						ytPlayer = new YT.Player("ytplayer", {
+							height: "1",
+							width: "1",
+							videoId: "D1Ukgsfj9ss",
+							playerVars: { autoplay: 1, controls: 0, rel: 0, playsinline: 1 },
+							events: {
+								onReady: (e) => {
+									e.target.playVideo();
+									songStarted = true;
+								},
+								onStateChange: (ev) => {
+									if (ev.data === 1) songStarted = true;
+								},
+							},
+						});
+					} else if (ytPlayer) {
+						ytPlayer.playVideo();
+						songStarted = true;
+					}
+				} else {
+					// фолбэк — простий iframe з autoplay
+					if (!document.getElementById("ytframe")) {
+						const ifr = document.createElement("iframe");
+						ifr.id = "ytframe";
+						ifr.width = 1;
+						ifr.height = 1;
+						ifr.style.position = "absolute";
+						ifr.style.left = "-9999px";
+						ifr.style.top = "-9999px";
+						ifr.setAttribute("allow", "autoplay; encrypted-media");
+						ifr.src =
+							"https://www.youtube.com/embed/D1Ukgsfj9ss?autoplay=1&rel=0&controls=0&playsinline=1";
+						holder.appendChild(ifr);
+					}
+				}
+				// якщо не стартувало — показати кнопку "Увімкнути музику"
+				setTimeout(() => {
+					if (!songStarted)
+						document.getElementById("playBtn").classList.remove("hidden");
+				}, 1500);
+			}
+
+			document.getElementById("playBtn").addEventListener("click", () => {
+				// відкриємо відтворення явно
+				const w = window.open(
+					"https://www.youtube.com/watch?v=D1Ukgsfj9ss",
+					"_blank"
+				);
+				if (!w) {
+					alert("Дозволь спливаючі вікна, щоб увімкнути музику.");
+				}
+			});
+
+			// Сердечка‑конфеті
+			function burstHearts() {
+				const box = document.getElementById("hearts");
+				const rect = document.getElementById("paper").getBoundingClientRect();
+				const cx = rect.left + rect.width / 2;
+				const cy = rect.top + window.scrollY + rect.height / 2;
+				for (let i = 0; i < 60; i++) {
+					const s = document.createElement("span");
+					s.className = "heart";
+					const angle = (Math.random() * 360 * Math.PI) / 180;
+					const dist = 80 + Math.random() * 420;
+					const dx = Math.cos(angle) * dist;
+					const dy = Math.sin(angle) * dist;
+					s.style.left = cx + "px";
+					s.style.top = cy + "px";
+					s.style.setProperty("--dx", dx + "px");
+					s.style.setProperty("--dy", dy + "px");
+					s.style.animation = `burst ${
+						700 + Math.random() * 900
+					}ms ease-out forwards`;
+					s.style.opacity = 0.9;
+					s.style.filter = `hue-rotate(${Math.random() * 60 - 30}deg)`;
+					box.appendChild(s);
+					setTimeout(() => s.remove(), 1800);
+				}
+			}
+
+			// Початкове застосування мови
+			applyI18n();
+		</script>
+	</body>
+</html>
